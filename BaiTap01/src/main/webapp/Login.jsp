@@ -70,10 +70,12 @@
         <input type="submit" value="Đăng nhập">
     </form>
 
-    <!-- Hiển thị lỗi nếu có -->
-    <% if (request.getParameter("error") != null) { %>
-        <p style="color:red;">Sai tên đăng nhập hoặc mật khẩu!</p>
-    <% } %>
+    <% if (request.getAttribute("errorMessage") != null) { %>
+    <div style="color: red;">
+        <%= request.getAttribute("errorMessage") %>
+    </div>
+<% } %>
+
 	
 </body>
 </html>
