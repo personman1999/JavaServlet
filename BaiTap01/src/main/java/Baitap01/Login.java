@@ -21,7 +21,11 @@ public class Login extends HttpServlet {
         if (username.equals("admin") && password.equals("123456")) {
 			String context =req.getContextPath();
 			resp.sendRedirect(context +"/welcom");
-		}
+		} else {
+            // Redirect back to the login page with an error message
+            req.setAttribute("errorMessage", "Invalid username or password.");
+            req.getRequestDispatcher("Login.jsp").forward(req, resp);
+        }
 	}
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
