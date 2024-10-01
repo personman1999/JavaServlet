@@ -21,12 +21,14 @@ public class Login extends HttpServlet {
         if (username.equals("admin") && password.equals("123456")) {
 			String context =req.getContextPath();
 			resp.sendRedirect(context +"/welcom");
-		}
+		} else {
+            req.setAttribute("errorMessage", "Invalid username or password.");
+            req.getRequestDispatcher("Login.jsp").forward(req, resp);
+        }
 	}
 	@Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
         throws ServletException, IOException {
-        // Chuyển hướng về trang đăng nhập nếu có yêu cầu GET
         request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 }
