@@ -95,10 +95,10 @@ public class UserController extends HttpServlet {
 
                 // Kiểm tra quyền của ROLE_ADMIN và vai trò của người dùng
                 if ("ROLE_ADMIN".equals(currentUserRole)) {
-                    // ROLE_ADMIN có thể xóa bất kỳ người dùng nào
+                    
                     userService.deleteUserById(userId);
                 } else if ("ROLE_MANAGER".equals(currentUserRole) && "ROLE_USER".equals(userToDelete.getRolename())) {
-                    // ROLE_MANAGER chỉ có thể xóa ROLE_USER
+                   
                     userService.deleteUserById(userId);
                 } else {
                     req.getRequestDispatcher("error-403.jsp").forward(req, resp);
@@ -138,7 +138,7 @@ public class UserController extends HttpServlet {
                 req.getRequestDispatcher("user-update.jsp").forward(req, resp);
             } else if ("ROLE_MANAGER".equals(currentUserRole)) {
                 if (currentUserEmail.equals(user.getEmail())) {
-                    // Sửa chính mình: hiển thị ROLE_MANAGER và ROLE_USER
+                    
                     RoleEntity roleManager = roleService.getRoleById(2);
                     RoleEntity roleUser = roleService.getRoleById(3);   
                     List<RoleEntity> listRole = List.of(roleManager, roleUser);
@@ -147,7 +147,7 @@ public class UserController extends HttpServlet {
                     req.setAttribute("listRole", listRole);
                     req.getRequestDispatcher("user-update.jsp").forward(req, resp);
                 } else if ("ROLE_USER".equals(user.getRolename())) {
-                    // Sửa ROLE_USER: chỉ hiển thị ROLE_USER
+                  
                     RoleEntity roleUser = roleService.getRoleById(3);
                     List<RoleEntity> listRole = List.of(roleUser);
 
@@ -155,11 +155,11 @@ public class UserController extends HttpServlet {
                     req.setAttribute("listRole", listRole);
                     req.getRequestDispatcher("user-update.jsp").forward(req, resp);
                 } else {
-                    // Không được phép sửa người dùng khác ngoài ROLE_USER
+                   
                     req.getRequestDispatcher("error-403.jsp").forward(req, resp);
                 }
             } else {
-                // Không có quyền truy cập
+                
                 req.getRequestDispatcher("error-403.jsp").forward(req, resp);
             }
         }
@@ -189,10 +189,10 @@ public class UserController extends HttpServlet {
 
         // Nếu là ROLE_MANAGER và thay đổi vai trò của bản thân
         if ("ROLE_MANAGER".equals(currentUserRole)) {
-            UserEntity currentUser = userService.getUserById(id);  // Lấy thông tin user trước khi thay đổi
+            UserEntity currentUser = userService.getUserById(id);  
 
             if (currentUser.getEmail().equals(currentUserEmail)) {
-                userService.updateUser(email, password, fullname, roleId, id); // Cập nhật thông tin người dùng
+                userService.updateUser(email, password, fullname, roleId, id);
 
                 // Lấy lại vai trò mới sau khi cập nhật
                 UserEntity updatedUser = userService.getUserById(id);
