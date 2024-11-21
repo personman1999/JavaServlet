@@ -3,57 +3,95 @@ package crm_app07controller;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import crm_app07service.LoginService;
 
-@WebServlet(name = "loginController", urlPatterns = "/login")
+import crm_app07service.LoginService;
+import crm_app07service.UserService;
+
+@WebServlet(name = "loginController", urlPatterns = { "/login", "/logout", "/register" })
 public class LoginController extends HttpServlet {
     private LoginService loginService = new LoginService();
+    private UserService userService = new UserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = "";
-        String password = "";
+        String path = req.getServletPath();
 
-        Cookie[] cookies = req.getCookies();
-        if (cookies != null) {
-            for (Cookie item : cookies) {
-                String name = item.getName();
-                String value = item.getValue();
-                if ("ckEmail".equals(name)) {
-                    email = value;
-                }
+        if ("/logout".equals(path)) {
+            loginService.logout(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/login");
+        } else if ("/register".equals(path)) {
+            // Chuyển hướng tới trang đăng ký
+            req.getRequestDispatcher("register.jsp").forward(req, resp);
+        } else {
+            // Xử lý yêu cầu login
+            String email = "";
+            String password = "";
 
-                if ("ckPassword".equals(name)) {
-                    password = value;
+            // Lấy thông tin từ cookie (nếu có)
+            if (req.getCookies() != null) {
+                for (var cookie : req.getCookies()) {
+                    if ("ckEmail".equals(cookie.getName())) {
+                        email = cookie.getValue();
+                    }
+                    if ("ckPassword".equals(cookie.getName())) {
+                        password = cookie.getValue();
+                    }
                 }
             }
-        }
 
-        req.setAttribute("email", email);
-        req.setAttribute("password", password);
-        System.out.println("Loaded email: " + email);
-        req.getRequestDispatcher("login.jsp").forward(req, resp);
+            req.setAttribute("email", email);
+            req.setAttribute("password", password);
+            req.getRequestDispatcher("login.jsp").forward(req, resp);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
-        String remember = req.getParameter("remember");
+        String path = req.getServletPath();
 
-        boolean isSuccess = loginService.checkLogin(email, password, remember, resp, req);
+        if ("/register".equals(path)) {
+            // Xử lý đăng ký
+            String email = req.getParameter("email");
+            String password = req.getParameter("password");
+            String fullname = req.getParameter("fullname");
 
-        if (!isSuccess) {
+            // Mặc định role là ROLE_USER
+            int roleId = 3; // Giả sử 3 là ID cho ROLE_USER trong database
 
-            resp.sendRedirect(req.getContextPath() + "/login"); 
-            return;
+            boolean isRegistered = userService.register(email, password, fullname, roleId);
+
+            if (isRegistered) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/register");
+            }
+        } else {
+            // Xử lý đăng nhập
+            String email = req.getParameter("email");
+            String password = req.getParameter("password");
+            String remember = req.getParameter("remember");
+
+            boolean isSuccess = loginService.checkLogin(email, password, remember, resp, req);
+
+            if (!isSuccess) {
+                resp.sendRedirect(req.getContextPath() + "/login");
+                return;
+            }
+
+            String role = loginService.getRoleName(email);
+
+            if ("ROLE_ADMIN".equals(role)) {
+                resp.sendRedirect(req.getContextPath() + "/users");
+            } else if ("ROLE_MANAGER".equals(role)) {
+                resp.sendRedirect(req.getContextPath() + "/users");
+            } else if ("ROLE_USER".equals(role)) {
+                resp.sendRedirect(req.getContextPath() + "/tasks");
+            } else {
+                resp.sendRedirect(req.getContextPath() + "/login");
+            }
         }
-
-        resp.sendRedirect(req.getContextPath() + "/users"); 
-
     }
 }
