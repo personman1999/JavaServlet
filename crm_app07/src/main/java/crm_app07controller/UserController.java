@@ -96,6 +96,7 @@ public class UserController extends HttpServlet {
 					return;
 				}
 
+<<<<<<< HEAD
 				// Kiểm tra quyền của ROLE_ADMIN và vai trò của người dùng
 				if ("ROLE_ADMIN".equals(currentUserRole)) {
 					// ROLE_ADMIN có thể xóa bất kỳ người dùng nào
@@ -112,6 +113,24 @@ public class UserController extends HttpServlet {
 				return;
 			}
 		}
+=======
+                // Kiểm tra quyền của ROLE_ADMIN và vai trò của người dùng
+                if ("ROLE_ADMIN".equals(currentUserRole)) {
+                    
+                    userService.deleteUserById(userId);
+                } else if ("ROLE_MANAGER".equals(currentUserRole) && "ROLE_USER".equals(userToDelete.getRolename())) {
+                   
+                    userService.deleteUserById(userId);
+                } else {
+                    req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+                return;
+            }
+        }
+>>>>>>> 44de7f7d35fcbfcdc782ee8b2898a646fb1cd8cf
 
 		// Lấy danh sách người dùng và hiển thị
 		List<UserEntity> listUser = userService.getAllUserTable();
@@ -145,6 +164,7 @@ public class UserController extends HttpServlet {
 					RoleEntity roleUser = roleService.getRoleById(3);
 					List<RoleEntity> listRole = List.of(roleManager, roleUser);
 
+<<<<<<< HEAD
 					req.setAttribute("user", user);
 					req.setAttribute("listRole", listRole);
 					req.getRequestDispatcher("user-update.jsp").forward(req, resp);
@@ -161,6 +181,42 @@ public class UserController extends HttpServlet {
 					req.getRequestDispatcher("error-403.jsp").forward(req, resp);
 				}
 			} else {
+=======
+            if ("ROLE_ADMIN".equals(currentUserRole)) {
+                // ROLE_ADMIN có thể sửa tất cả người dùng
+                List<RoleEntity> listRole = roleService.getAllRoles();
+                req.setAttribute("user", user);
+                req.setAttribute("listRole", listRole);
+                req.getRequestDispatcher("user-update.jsp").forward(req, resp);
+            } else if ("ROLE_MANAGER".equals(currentUserRole)) {
+                if (currentUserEmail.equals(user.getEmail())) {
+                    
+                    RoleEntity roleManager = roleService.getRoleById(2);
+                    RoleEntity roleUser = roleService.getRoleById(3);   
+                    List<RoleEntity> listRole = List.of(roleManager, roleUser);
+
+                    req.setAttribute("user", user);
+                    req.setAttribute("listRole", listRole);
+                    req.getRequestDispatcher("user-update.jsp").forward(req, resp);
+                } else if ("ROLE_USER".equals(user.getRolename())) {
+                  
+                    RoleEntity roleUser = roleService.getRoleById(3);
+                    List<RoleEntity> listRole = List.of(roleUser);
+
+                    req.setAttribute("user", user);
+                    req.setAttribute("listRole", listRole);
+                    req.getRequestDispatcher("user-update.jsp").forward(req, resp);
+                } else {
+                   
+                    req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+                }
+            } else {
+                
+                req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+            }
+        }
+    }
+>>>>>>> 44de7f7d35fcbfcdc782ee8b2898a646fb1cd8cf
 
 				req.getRequestDispatcher("error-403.jsp").forward(req, resp);
 			}
@@ -192,9 +248,45 @@ public class UserController extends HttpServlet {
 			if (currentUser.getEmail().equals(currentUserEmail)) {
 				userService.updateUser(email, password, fullname, roleId, id);
 
+<<<<<<< HEAD
 				// Lấy lại vai trò mới sau khi cập nhật
 				UserEntity updatedUser = userService.getUserById(id);
 				String newRole = updatedUser.getRolename();
+=======
+        // Nếu là ROLE_ADMIN, không thay đổi cookie authen
+        if ("ROLE_ADMIN".equals(currentUserRole)) {
+            userService.updateUser(email, password, fullname, roleId, id);
+            resp.sendRedirect(req.getContextPath() + "/users");
+            return;
+        }
+
+        // Nếu là ROLE_MANAGER và thay đổi vai trò của bản thân
+        if ("ROLE_MANAGER".equals(currentUserRole)) {
+            UserEntity currentUser = userService.getUserById(id);  
+
+            if (currentUser.getEmail().equals(currentUserEmail)) {
+                userService.updateUser(email, password, fullname, roleId, id);
+
+                // Lấy lại vai trò mới sau khi cập nhật
+                UserEntity updatedUser = userService.getUserById(id);
+                String newRole = updatedUser.getRolename();
+
+                // Nếu vai trò thay đổi, cập nhật cookie
+                if (!currentUserRole.equals(newRole)) {
+                    Cookie authCookie = new Cookie("authen", newRole);
+                    authCookie.setMaxAge(60);
+                    resp.addCookie(authCookie);
+                }
+
+                resp.sendRedirect(req.getContextPath() + "/tasks");
+            } else {
+                req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+            }
+        } else {
+            req.getRequestDispatcher("error-403.jsp").forward(req, resp);
+        }
+    }
+>>>>>>> 44de7f7d35fcbfcdc782ee8b2898a646fb1cd8cf
 
 				// Nếu vai trò thay đổi, cập nhật cookie
 				if (!currentUserRole.equals(newRole)) {
