@@ -136,8 +136,8 @@
 										<a href="javascript:void(0)"><img
 											src="plugins/images/users/genu.jpg"
 											class="thumb-lg img-circle" alt="img"></a>
-										<h4 class="text-white">Nguyễn Văn Tèo</h4>
-										<h5 class="text-white">info.teo@gmail.com</h5>
+										<h4 class="text-white">${user.fullname}</h4>
+										<h5 class="text-white">${user.email}</h5>
 									</div>
 								</div>
 							</div>
@@ -220,70 +220,37 @@
 				</div>
 				<br />
 				<!-- /.row -->
-				<!-- BEGIN DANH SÁCH CÔNG VIỆC -->
 				<h4>DANH SÁCH CÔNG VIỆC</h4>
-				<div class="row">
-					<div class="col-md-4">
-						<div class="white-box">
-							<h3 class="box-title">Chưa thực hiện</h3>
-							<div class="message-center">
-								<c:forEach var="task" items="${userTasks}">
-									<c:if test="${task.status == 'Chưa thực hiện'}">
-										<a href="#">
-											<div class="mail-contnet">
-												<h5>${task.name}</h5>
-												<span class="mail-desc"></span> <span class="time">Bắt
-													đầu: ${task.startDate}</span> <span class="time">Kết thúc:
-													${task.endDate}</span>
-											</div>
-										</a>
-									</c:if>
-								</c:forEach>
-							</div>
-						</div>
-					</div>
 
-					<div class="col-md-4">
-						<div class="white-box">
-							<h3 class="box-title">Đang thực hiện</h3>
-							<div class="message-center">
-								<c:forEach var="task" items="${userTasks}">
-									<c:if test="${task.status == 'Đang thực hiện'}">
-										<a href="#">
-											<div class="mail-contnet">
-												<h5>${task.name}</h5>
-												<span class="mail-desc"></span> <span class="time">Bắt
-													đầu: ${task.startDate}</span> <span class="time">Kết thúc:
-													${task.endDate}</span>
-											</div>
-										</a>
-									</c:if>
-								</c:forEach>
-							</div>
-						</div>
-					</div>
+				<!-- Container cho tất cả status -->
+				<div class="status-container"
+					style="display: flex; flex-wrap: wrap; gap: 20px;">
+					<c:forEach items="${groupedTasks}" var="entry">
+						<!-- Mỗi status là một "box" -->
+						<div class="status-box" style="flex: 1; min-width: 300px;">
+							<!-- Tên status -->
+							<h3 class="box-title">${entry.key}</h3>
+							<!-- entry.key là statusName -->
 
-					<div class="col-md-4">
-						<div class="white-box">
-							<h3 class="box-title">Đã hoàn thành</h3>
-							<div class="message-center">
-								<c:forEach var="task" items="${userTasks}">
-									<c:if test="${task.status == 'Đã hoàn thành'}">
+							<!-- Danh sách công việc thuộc status -->
+							<c:forEach items="${entry.value}" var="task">
+								<div class="white-box">
+									<div class="message-center">
 										<a href="#">
 											<div class="mail-contnet">
-												<h5>${task.name}</h5>
+												<h5>${task.taskName}</h5>
 												<span class="mail-desc"></span> <span class="time">Bắt
 													đầu: ${task.startDate}</span> <span class="time">Kết thúc:
 													${task.endDate}</span>
 											</div>
 										</a>
-									</c:if>
-								</c:forEach>
-							</div>
+									</div>
+								</div>
+							</c:forEach>
 						</div>
-					</div>
+					</c:forEach>
 				</div>
-				<!-- END DANH SÁCH CÔNG VIỆC -->
+
 			</div>
 			<!-- /.container-fluid -->
 			<footer class="footer text-center"> 2018 &copy; myclass.com

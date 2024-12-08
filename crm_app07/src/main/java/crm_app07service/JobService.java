@@ -2,6 +2,7 @@ package crm_app07service;
 
 import java.util.List;
 import crm_app07entity.JobEntity;
+import crm_app07entity.UserTaskEntity;
 import crm_app07repository.JobRepository;
 
 public class JobService {
@@ -40,5 +41,10 @@ public class JobService {
         } else {
             return "Failed to update job. Please try again.";
         }
+    }
+    
+    
+    public List<UserTaskEntity> jobDetail(int jobId) {
+    	return jobRepository.findUsersAndTasksByJobId(jobId);
     }
 }

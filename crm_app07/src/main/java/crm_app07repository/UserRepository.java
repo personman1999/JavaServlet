@@ -76,6 +76,8 @@ public class UserRepository {
 		return listUserTable;
 	}
 
+	
+	
 	public int deleteById(int id) {
 		int rowDelete = 0;
 		String query = "DELETE FROM users u WHERE u.id= ?";
@@ -201,5 +203,38 @@ public class UserRepository {
 	    return listUsers;
 	}
 
+	public List<TaskEntity> findTasksByUserId(int userId) {
+	    List<TaskEntity> tasks = new ArrayList<>();
+	    String query = "SELECT t.id AS task_id, t.name, t.start_date, t.end_date, " +
+	                   "s.name AS status_name, u.fullname, u.email " +
+	                   "FROM tasks t " +
+	                   "JOIN users u ON t.user_id = u.id " +
+	                   "JOIN status s ON t.status_id = s.id " +
+	                   "WHERE u.id = ?";
+
+	    Connection connection = MysqlConfig.getConnection();
+
+	    try {
+	        PreparedStatement statement = connection.prepareStatement(query);
+	        statement.setInt(1, userId);
+	        ResultSet result = statement.executeQuery();
+
+	        while (result.next()) {
+	            TaskEntity task = new TaskEntity();
+	            task.setId(result.getInt("task_id"));
+	            task.setTaskName(result.getString("name"));
+	            task.setStartDate(result.getString("start_date"));
+				task.setEndDate(result.getString("end_date"));
+	            task.setStatusName(result.getString("status_name"));
+	            task.setFullName(result.getString("fullname"));
+
+	            tasks.add(task);
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return tasks;
+	}
 
 }

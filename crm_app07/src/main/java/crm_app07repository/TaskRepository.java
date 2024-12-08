@@ -97,7 +97,7 @@ public class TaskRepository {
                 taskEntity.setJobName(result.getString("job_name"));
                 taskEntity.setFullName(result.getString("fullname"));
                 taskEntity.setStartDate(result.getString("start_date"));
-                taskEntity.setEndDate(result.getString("end_date"));
+                taskEntity.setEndDate(result.getString("end_date"));       
                 taskEntity.setStatusName(result.getString("status_name"));
             }
         } catch (Exception e) {
@@ -163,5 +163,36 @@ public class TaskRepository {
         }
         return listTasks;
     }
+    
+    
+    public List<TaskEntity> findByIdDetail(int id) {
+    	List<TaskEntity> listDetail = new ArrayList<TaskEntity>();
+        String query = "SELECT u.fullname AS full_name, s.name AS status_name, " +
+                       "t.name AS task_name, t.start_date " +
+                       "FROM tasks t " +
+                       "JOIN users u ON t.user_id = u.id " +
+                       "JOIN status s ON t.status_id = s.id " +
+                       "WHERE t.id = ?";
+
+        try (Connection connection = MysqlConfig.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            if (result.next()) {
+                TaskEntity taskEntity = new TaskEntity();
+                taskEntity.setFullName(result.getString("full_name"));
+                taskEntity.setStatusName(result.getString("status_name"));
+                taskEntity.setTaskName(result.getString("task_name"));
+                taskEntity.setStartDate(result.getString("start_date"));
+                
+                listDetail.add(taskEntity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listDetail;
+    }
+
 
 }

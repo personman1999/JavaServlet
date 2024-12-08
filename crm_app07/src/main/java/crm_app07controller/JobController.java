@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import crm_app07entity.JobEntity;
+import crm_app07entity.UserTaskEntity;
 import crm_app07service.JobService;
 
 @SuppressWarnings("serial")
-@WebServlet(name = "jobController", urlPatterns = { "/jobs", "/job-add", "/job-update" })
+@WebServlet(name = "jobController", urlPatterns = { "/jobs", "/job-add", "/job-update", "/job-detail" })
 public class JobController extends HttpServlet {
 
     private JobService jobService = new JobService();
@@ -28,7 +29,9 @@ public class JobController extends HttpServlet {
             showAddJobForm(req, resp);
         } else if (path.equals("/job-update")) {
             showEditJobForm(req, resp);
-        } 
+        } else if(path.equals("/job-detail")) {
+        	showJobDetail(req, resp);
+        }
     }
 
 
@@ -76,11 +79,11 @@ public class JobController extends HttpServlet {
                 req.setAttribute("job", job);
                 req.getRequestDispatcher("task-update.jsp").forward(req, resp);
             } else {
-                req.setAttribute("error", "Job not found!");
+
                 req.getRequestDispatcher("task.jsp").forward(req, resp);
             }
         } else {
-            req.setAttribute("error", "Invalid Job ID");
+
             req.getRequestDispatcher("task.jsp").forward(req, resp);
         }
     }
@@ -115,4 +118,14 @@ public class JobController extends HttpServlet {
     }
 
 
+    // show công việc
+    private void showJobDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        if (id != null) {
+			List<UserTaskEntity> jobs = jobService.jobDetail(Integer.parseInt(id));
+			req.setAttribute("jobs", jobs);
+			req.getRequestDispatcher("task-detail.jsp").forward(req, resp);
+		}
+        
+	}
 }

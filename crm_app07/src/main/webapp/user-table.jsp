@@ -157,7 +157,7 @@
 												<td><a href="/crm_app07/user-update?id=${user.id}" class="btn btn-sm btn-primary">Sửa</a>
 													<a href="/crm_app07/users?id=${user.id}"
 													class="btn btn-sm btn-danger">Xóa</a> <a
-													href="user-details.html" class="btn btn-sm btn-info">Xem</a>
+													href="/crm_app07/user-detail?id=${user.id}" class="btn btn-sm btn-info">Xem</a>
 												</td>
 											</tr>
 										</c:forEach>

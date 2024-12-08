@@ -7,16 +7,19 @@ public class UserEntity {
 	private String password;
 	private String rolename;
 	private int roleId;
-	private String statusName;
+	private int taskId;
+	
 
 
 
-	public String getStatusName() {
-		return statusName;
+
+
+	public int getTaskId() {
+		return taskId;
 	}
 
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
 	}
 
 	public int getRoleId() {

@@ -163,6 +163,7 @@
 												<td><a href="/crm_app07/task-update?id=${task.id}" class="btn btn-sm btn-primary">Sửa</a>
 													<a href="/crm_app07/tasks?id=${task.id}"
 													class="btn btn-sm btn-danger">Xóa</a>
+													 <a href="/crm_app07/task-detail?id=${task.id}" class="btn btn-sm btn-info">Xem</a>
 											</tr>
 
 										</c:forEach>

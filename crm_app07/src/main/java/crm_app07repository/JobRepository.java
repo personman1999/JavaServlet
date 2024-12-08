@@ -8,6 +8,7 @@ import java.util.List;
 
 import crm_app07config.MysqlConfig;
 import crm_app07entity.JobEntity;
+import crm_app07entity.UserTaskEntity;
 
 public class JobRepository {
 	public List<JobEntity> findAll() {
@@ -113,5 +114,42 @@ public class JobRepository {
 	    return rowUpdated;
 	}
 
-	
+	 public List<UserTaskEntity> findUsersAndTasksByJobId(int jobId) {
+	        List<UserTaskEntity> userTaskList = new ArrayList<>();
+	        String query = "SELECT u.id AS user_id, u.fullname, u.email, t.id AS task_id, t.name AS task_name, " +
+	                       "t.start_date, t.end_date, s.name AS status_name, j.name " +
+	                       "FROM users u " +
+	                       "JOIN tasks t ON u.id = t.user_id " +
+	                       "JOIN jobs j ON t.job_id = j.id " +
+	                       "JOIN status s ON t.status_id = s.id " +
+	                       "WHERE j.id = ?";
+
+	        Connection connection = MysqlConfig.getConnection();
+	        try {
+	            PreparedStatement statement = connection.prepareStatement(query);
+	            statement.setInt(1, jobId);  // Đặt giá trị jobId vào dấu hỏi chấm
+	            ResultSet result = statement.executeQuery();
+
+	            while (result.next()) {
+	                // Giả sử bạn có một class UserTaskEntity để chứa thông tin người dùng và nhiệm vụ
+	                UserTaskEntity userTaskEntity = new UserTaskEntity();
+	                userTaskEntity.setUserId(result.getInt("user_id"));
+	                userTaskEntity.setFullname(result.getString("fullname"));
+	                userTaskEntity.setEmail(result.getString("email"));
+	                userTaskEntity.setTaskId(result.getInt("task_id"));
+	                userTaskEntity.setTaskName(result.getString("task_name"));
+	                userTaskEntity.setStartDate(result.getString("start_date"));
+	                userTaskEntity.setEndDate(result.getString("end_date"));
+	                userTaskEntity.setStatusName(result.getString("status_name"));
+	                userTaskEntity.setJobName(result.getString("name"));
+	                
+
+	                userTaskList.add(userTaskEntity);
+	            }
+	        } catch (Exception e) {
+	            System.out.println("findUsersAndTasksByJobId " + e.getLocalizedMessage());
+	        }
+
+	        return userTaskList;
+	    }
 }

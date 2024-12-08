@@ -39,32 +39,27 @@ public class ProfileController extends HttpServlet {
 
     // Hiển thị thông tin profile và danh sách công việc theo email lấy từ cookie
     private void showProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Lấy email từ cookie
-        String email = getEmailFromCookies(req);
+        
+        String email = service.getEmailFromCookies(req);
         if (email == null) {
-            // Nếu không tìm thấy email trong cookie, chuyển hướng về trang đăng nhập hoặc thông báo lỗi
+           
         	 req.getRequestDispatcher("profile.jsp").forward(req, resp);
             return;
         }
 
+        List<UserEntity> listUser = service.getAllUserTable();   
+        req.setAttribute("user", listUser.isEmpty() ? null : listUser.get(0));
         // Lấy danh sách công việc theo email
+        
+       
         List<TaskEntity> listTasks = service.getTasksByEmail(email);
-
+     
         req.setAttribute("profile", listTasks);
         req.getRequestDispatcher("profile.jsp").forward(req, resp);
     }
 
-    // Lấy email từ cookies
-    private String getEmailFromCookies(HttpServletRequest req) {
-        if (req.getCookies() != null) {
-            for (Cookie cookie : req.getCookies()) {
-                if ("ckEmail".equals(cookie.getName())) { // Kiểm tra cookie với tên là "userEmail"
-                    return cookie.getValue();  // Trả về giá trị của email
-                }
-            }
-        }
-        return null;  // Nếu không tìm thấy cookie email, trả về null
-    }
+
+  
 
     // Hiển thị form cập nhật công việc
     private void showEditTaskForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

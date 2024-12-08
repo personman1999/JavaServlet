@@ -1,16 +1,21 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html lang="en">
 
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Tell the browser to be responsive to screen width -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
+<!-- Favicon icon -->
 <link rel="icon" type="image/png" sizes="16x16"
 	href="plugins/images/favicon.png">
 <title>Pixel Admin</title>
@@ -20,13 +25,14 @@
 <link
 	href="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css"
 	rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-<!-- animation CSS -->
+<!-- Animation CSS -->
 <link href="css/animate.css" rel="stylesheet">
 <!-- Custom CSS -->
 <link href="css/style.css" rel="stylesheet">
-<!-- color CSS -->
+<!-- color CSS you can use different color css from css/colors folder -->
+<!-- We have chosen the skin-blue (blue.css) for this starter
+          page. However, you can choose any other skin from folder css / colors .
+-->
 <link href="css/colors/blue-dark.css" id="theme" rel="stylesheet">
 <link rel="stylesheet" href="./css/custom.css">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -51,7 +57,7 @@
 					data-target=".navbar-collapse"> <i class="fa fa-bars"></i>
 				</a>
 				<div class="top-left-part">
-					<a class="logo" href="/crm_app07"> <b> <img
+					<a class="logo" href="index.html"> <b> <img
 							src="plugins/images/pixeladmin-logo.png" alt="home" />
 					</b> <span class="hidden-xs"> <img
 							src="plugins/images/pixeladmin-text.png" alt="home" />
@@ -76,10 +82,10 @@
 								class="hidden-xs">Cybersoft</b>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="/crm_app07/profile">Thông tin cá nhân</a></li>
+								<li><a href="profile.html">Thông tin cá nhân</a></li>
 								<li><a href="#">Thống kê công việc</a></li>
 								<li class="divider"></li>
-								<li><a href="/crm_app07/logout">Đăng xuất</a></li>
+								<li><a href="#">Đăng xuất</a></li>
 							</ul>
 						</div>
 					</li>
@@ -92,9 +98,9 @@
 		<!-- Left navbar-header -->
 		<div class="navbar-default sidebar" role="navigation">
 			<div class="sidebar-nav navbar-collapse slimscrollsidebar">
-			<ul class="nav" id="side-menu">
+				<ul class="nav" id="side-menu">
 					<li style="padding: 10px 0 0;"><a
-						href="/crm_app07" class="waves-effect"><i
+						href="/crm_application/index" class="waves-effect"><i
 							class="fa fa-clock-o fa-fw" aria-hidden="true"></i><span
 							class="hide-menu">Dashboard</span></a></li>
 					<li><a href="/crm_app07/users" class="waves-effect"><i
@@ -124,52 +130,122 @@
 			<div class="container-fluid">
 				<div class="row bg-title">
 					<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-						<h4 class="page-title">Danh sách dự án</h4>
+						<h4 class="page-title">Chi tiết công việc</h4>
 					</div>
-					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
-						<a href="/crm_app07/job-add" class="btn btn-sm btn-success">Thêm
-							mới</a>
+					<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+						<ol class="breadcrumb">
+							<li><a href="#">Dashboard</a></li>
+							<li class="active">Blank Page</li>
+						</ol>
 					</div>
 					<!-- /.col-lg-12 -->
 				</div>
-				<!-- /row -->
+				<!-- BEGIN THỐNG KÊ -->
 				<div class="row">
-					<div class="col-sm-12">
+					<!--col -->
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 						<div class="white-box">
-							<div class="table-responsive">
-
-								<table class="table" id="example">
-									<thead>
-										<tr>
-											<th>STT</th>
-											<th>Tên Dự Án</th>
-											<th>Ngày Bắt Đầu</th>
-											<th>Ngày Kết Thúc</th>
-											<th>Hành Động</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach items="${listJobs}" var="job">
-											<tr>
-												<td>${job.id}</td>
-												<td>${job.jobName}</td>
-												<td>${job.startDate}</td>
-												<td>${job.endDate}</td>
-												<td><a href="/crm_app07/job-update?id=${job.id}" class="btn btn-sm btn-primary">Sửa</a>
-													<a href="/crm_app07/jobs?id=${job.id}"
-													class="btn btn-sm btn-danger">Xóa</a> 
-													<a href="/crm_app07/job-detail?id=${job.id}" class="btn btn-sm btn-info">Xem</a>
-												</td>
-											</tr>
-										</c:forEach>
-
-									</tbody>
-								</table>
+							<div class="col-in row">
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<i data-icon="E" class="linea-icon linea-basic"></i>
+									<h5 class="text-muted vb">CHƯA BẮT ĐẦU</h5>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<h3 class="counter text-right m-t-15 text-danger">20%</h3>
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="progress">
+										<div class="progress-bar progress-bar-danger"
+											role="progressbar" aria-valuenow="40" aria-valuemin="0"
+											aria-valuemax="100" style="width: 20%"></div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
+					<!-- /.col -->
+					<!--col -->
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="white-box">
+							<div class="col-in row">
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<i class="linea-icon linea-basic" data-icon="&#xe01b;"></i>
+									<h5 class="text-muted vb">ĐANG THỰC HIỆN</h5>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<h3 class="counter text-right m-t-15 text-megna">50%</h3>
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="progress">
+										<div class="progress-bar progress-bar-megna"
+											role="progressbar" aria-valuenow="40" aria-valuemin="0"
+											aria-valuemax="100" style="width: 50%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.col -->
+					<!--col -->
+					<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+						<div class="white-box">
+							<div class="col-in row">
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<i class="linea-icon linea-basic" data-icon="&#xe00b;"></i>
+									<h5 class="text-muted vb">HOÀN THÀNH</h5>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-6">
+									<h3 class="counter text-right m-t-15 text-primary">30%</h3>
+								</div>
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="progress">
+										<div class="progress-bar progress-bar-primary"
+											role="progressbar" aria-valuenow="40" aria-valuemin="0"
+											aria-valuemax="100" style="width: 30%"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /.col -->
 				</div>
-				<!-- /.row -->
+				<!-- END THỐNG KÊ -->
+
+				<!-- BEGIN DANH SÁCH CÔNG VIỆC -->
+				<c:forEach var="task" items="${tasks}">
+    <div class="row mb-4">
+        <!-- User Info -->
+        <div class="col-xs-12">
+            <a href="#" class="group-title">
+                <img width="30" src="plugins/images/users/pawandeep.jpg" class="img-circle" />
+                <span>${task.fullName}</span>
+            </a>
+        </div>
+        
+        <!-- Task Info -->
+        <div class="col-md-4">
+            <div class="white-box">
+                <!-- Task Status -->
+                <h3 class="box-title">${task.statusName}</h3>
+                
+                <!-- Task Details -->
+                <div class="message-center">
+                    <a href="#">
+                        <div class="mail-content">
+                            <h5>${task.fullName}</h5>
+                            <span class="mail-desc">${task.taskName}</span>
+                            <span class="time">${task.startDate}</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:forEach>
+
+
+
+				<!-- END DANH SÁCH CÔNG VIỆC -->
 			</div>
 			<!-- /.container-fluid -->
 			<footer class="footer text-center"> 2018 &copy; myclass.com
@@ -187,17 +263,10 @@
 		src="plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js"></script>
 	<!--slimscroll JavaScript -->
 	<script src="js/jquery.slimscroll.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 	<!--Wave Effects -->
 	<script src="js/waves.js"></script>
 	<!-- Custom Theme JavaScript -->
 	<script src="js/custom.min.js"></script>
-	<script>
-		$(document).ready(function() {
-			$('#example').DataTable();
-		});
-	</script>
 </body>
 
 </html>

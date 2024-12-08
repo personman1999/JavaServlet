@@ -74,6 +74,11 @@
 
 <div class="login-container">
     <h3>Đăng Nhập Hệ Thống</h3>
+        <c:if test="${not empty errorMessage}">
+        <div class="alert alert-danger" role="alert">
+            ${errorMessage}
+        </div>
+    </c:if>
     <form action="login" method="POST">
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>

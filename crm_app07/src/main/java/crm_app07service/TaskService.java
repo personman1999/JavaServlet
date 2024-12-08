@@ -1,6 +1,8 @@
 package crm_app07service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +38,10 @@ public class TaskService {
 
 	public TaskEntity getTaskById(int id) {
 		return taskRepository.findById(id);
+	}
+	
+	public List<TaskEntity> getTaskByIdDetail(int id) {
+		return taskRepository.findByIdDetail(id);
 	}
 
 	public boolean updateTask(int id, String taskName, String startDate, String endDate, int userId, int jobId,
@@ -74,5 +80,19 @@ public class TaskService {
 	    return taskRepository.findAllByEmail(email);
 	}
 
-
+	  public String getEmailFromCookies(HttpServletRequest req) {
+	        if (req.getCookies() != null) {
+	            for (Cookie cookie : req.getCookies()) {
+	                if ("ckEmail".equals(cookie.getName())) { 
+	                    return cookie.getValue(); 
+	                }
+	            }
+	        }
+	        return null; 
+	    }
+	  
+	  public Map<String, List<TaskEntity>> groupTasksByStatus(List<TaskEntity> tasks) {
+		    // Gộp dữ liệu theo statusName
+		    return tasks.stream().collect(Collectors.groupingBy(TaskEntity::getStatusName));
+		}
 }

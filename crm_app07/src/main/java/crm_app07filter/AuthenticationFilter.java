@@ -31,7 +31,7 @@ public class AuthenticationFilter extends HttpFilter {
             }
         }
 
-        // Nếu không xác thực, chuyển hướng đến trang login
+       
         if (!isAuthenticated) {
             res.sendRedirect(req.getContextPath() + "/login");
             return;

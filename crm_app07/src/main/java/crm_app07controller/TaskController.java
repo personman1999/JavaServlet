@@ -15,7 +15,7 @@ import crm_app07entity.UserEntity;
 import crm_app07service.TaskService;
 
 
-@WebServlet(name = "taskController", urlPatterns = { "/tasks", "/task-add", "/task-update" })
+@WebServlet(name = "taskController", urlPatterns = { "/tasks", "/task-add", "/task-update", "/task-detail" })
 public class TaskController extends HttpServlet {
     private TaskService taskService = new TaskService();
 
@@ -28,6 +28,8 @@ public class TaskController extends HttpServlet {
             showAddTaskForm(req, resp);
         } else if (path.equals("/task-update")) {
             showEditTaskForm(req, resp);
+        } else if(path.equals("/task-detail")) {
+        	showTaskDetail(req, resp);
         }
     }
 
@@ -43,13 +45,13 @@ public class TaskController extends HttpServlet {
 
  // Delete
     private void deleteTask(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String role = taskService.getRoleFromCookies(req); // Lấy vai trò từ cookie
+        String role = taskService.getRoleFromCookies(req); 
         String id = req.getParameter("id");
 
         // Nếu người dùng là ROLE_USER, không cho phép xóa Task
         if ("ROLE_USER".equals(role)) {
-            // Chỉ tải danh sách Task, không thực hiện xóa
-            List<TaskEntity> listTasks = taskService.task(); // Lấy danh sách Task
+       
+            List<TaskEntity> listTasks = taskService.task(); 
             req.setAttribute("listTasks", listTasks);
             req.getRequestDispatcher("groupwork.jsp").forward(req, resp);
             return;
@@ -59,8 +61,6 @@ public class TaskController extends HttpServlet {
         if (id != null) {
             taskService.deleteTask(Integer.parseInt(id));
         }
-
-        // Tải danh sách Task sau khi xóa
         List<TaskEntity> listTasks = taskService.task();
         req.setAttribute("listTasks", listTasks);
         req.getRequestDispatcher("groupwork.jsp").forward(req, resp);
@@ -113,6 +113,7 @@ public class TaskController extends HttpServlet {
     // Update form
     private void showEditTaskForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
+      
         if (id != null) {
             
             TaskEntity listTask = taskService.getTaskById(Integer.parseInt(id));
@@ -149,6 +150,20 @@ public class TaskController extends HttpServlet {
             
             req.setAttribute("error", "Update failed. Please try again.");
             showEditTaskForm(req, resp);
+        }
+    }
+    
+ // Hiển thị chi tiết công việc
+    private void showTaskDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String id = req.getParameter("id");
+        
+        if (id != null) {
+        	
+            List<TaskEntity> task = taskService.getTaskByIdDetail(Integer.parseInt(id));
+            req.setAttribute("tasks", task);
+          
+
+            req.getRequestDispatcher("groupwork-detail.jsp").forward(req, resp);
         }
     }
 }
